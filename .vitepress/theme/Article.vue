@@ -5,8 +5,8 @@ import { computed } from 'vue'
 import { useData, useRoute } from 'vitepress'
 import posts from '../metadata.json'
 
-const { frontmatter: data } = useData()
-
+const { frontmatter: data, page } = useData()
+const headers = page.value.headers
 const route = useRoute()
 
 function findCurrentIndex() {
@@ -43,7 +43,7 @@ const prevPost = computed(() => posts[findCurrentIndex() + 1])
         divide-y
         xl:divide-y-0
         divide-gray-200
-        xl:grid xl:grid-cols-4 xl:gap-x-10
+        xl:grid xl:grid-cols-5 xl:gap-x-10
         pb-16
         xl:pb-20
       "
@@ -53,7 +53,22 @@ const prevPost = computed(() => posts[findCurrentIndex() + 1])
       <div class="divide-y divide-gray-200 xl:pb-0 xl:col-span-3 xl:row-span-2">
         <Content class="prose max-w-none pt-10 pb-8" />
       </div>
-
+      <ul class="xl:mt-11 p-3 inline-block shadow rounded sticky top-10 space-y-2">
+        <li class="catalog-item" v-for="item in headers">
+          <a
+            class="hover:text-green-300 hover:underline"
+            v-if="item.level == 2"
+            :href="'#' + item.slug"
+            >{{ item.title }}</a
+          >
+          <a
+            class="hover:text-green-300"
+            v-if="item.level == 3"
+            :href="'#' + item.slug"
+            >{{ item.title }}</a
+          >
+        </li>
+      </ul>
       <footer
         class="
           text-sm
